@@ -58,7 +58,7 @@ def handle_message(event):
 	debug_mode_login = False
 	verified = False
 
-	reply_text = 'ごめんなさい、その文章は理解できないの'
+	reply_text = "ごめんなさい、その文章は理解できないの\n使い方を見るには'help'って送信してみて"
 
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 	conn.autocommit = True
@@ -86,6 +86,10 @@ def handle_message(event):
 			else:
 				cur.execute("INSERT INTO admins ( user_id ) values ( %s )", [user_id])
 				reply_text = '合言葉を言ってね'
+		elif text == 'help':
+			f = open('help.txt', 'r')
+			reply_text = f.read()
+			f.close()
 		elif (verified and text == 'exit'):
 			cur.execute("DELETE FROM admins WHERE user_id = %s", [user_id])
 			reply_text = 'デバッグモードを終了しました'
