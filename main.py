@@ -9,7 +9,7 @@ from linebot.exceptions import (
 )
 
 from linebot.models import (
-	MessageEvent, TextMessage, TextSendMessage
+	MessageEvent, TextMessage, TextSendMessage, FollowEvent
 )
 
 import os
@@ -50,6 +50,13 @@ def callback():
 		abort(400)
 
 	return 'OK'
+
+@handler.add(FollowEvent)
+def handle_follow(event):
+	reply_text = '友だち登録ありがとうございます！'
+	line_bot_api.reply_message(
+		event.reply_token,
+		TextSendMessage(text=reply_text))
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
